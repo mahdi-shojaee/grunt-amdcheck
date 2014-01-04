@@ -1,7 +1,7 @@
 {
   "name": "grunt-amd-dependency-checker",
-  "description": "A grunt plugin that finds unused dependencies in AMD modules.",
-  "version": "0.1.0",
+  "description": "Finds unused dependencies in AMD modules.",
+  "version": "0.1.1",
   "homepage": "https://github.com/mehdishojaei/grunt-amd-dependency-checker",
   "author": {
     "name": "Mehdi Shojaei",
@@ -39,7 +39,6 @@
     "unused",
     "requirejs"
   ],
-  "readme": "# grunt-amd-dependency-checker\r\n\r\n> A grunt plugin that finds unused dependencies in AMD modules.\r\n\r\n## Getting Started\r\nThis plugin requires Grunt `~0.4.0`\r\n\r\nIf you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:\r\n\r\n```shell\r\nnpm install grunt-amd-dependency-checker --save-dev\r\n```\r\n\r\nOnce the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:\r\n\r\n```js\r\ngrunt.loadNpmTasks('grunt-amd-dependency-checker');\r\n```\r\n\r\n## The \"amd_dependency_checker\" task\r\n\r\n### Overview\r\nIn your project's Gruntfile, add a section named `amd_dependency_checker` to the data object passed into `grunt.initConfig()`.\r\n\r\n```js\r\ngrunt.initConfig({\r\n  amd_dependency_checker: {\r\n    options: {\r\n      // Task-specific options go here.\r\n    },\r\n    your_target: {\r\n      // Target-specific file lists and/or options go here.\r\n    },\r\n  },\r\n});\r\n```\r\n\r\n### Options\r\n\r\nCurrently no options are supported.\r\n\r\n### Usage Examples\r\n\r\n```js\r\ngrunt.initConfig({\r\n  amd_dependency_checker: {\r\n    options: {},\r\n    files: [\r\n      {\r\n        expand: true,     // Enable dynamic expansion.\r\n        cwd: 'test/js/',  // Src matches are relative to this path.\r\n        src: ['**/*.js'], // Actual pattern(s) to match.\r\n      },\r\n    ],\r\n  },\r\n});\r\n```\r\n\r\n## Contributing\r\nIn lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).\r\n\r\n## Release History\r\n_(Nothing yet)_\r\n",
   "readmeFilename": "README.md",
   "_id": "grunt-amd-dependency-checker@0.1.0",
   "_from": "grunt-amd-dependency-checker@"

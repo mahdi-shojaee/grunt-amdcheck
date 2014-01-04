@@ -13,6 +13,8 @@ module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
+  var options = {};
+
   var getModuleBody = function (text) {
     for (var i = 0, counter = 0, len = text.length; i < len; ++i) {
       if (text[i] === '{') {
@@ -40,9 +42,6 @@ module.exports = function(grunt) {
   },
 
   findUseage = function (variable, text) {
-    // Add white space to start and end of text for cases that variable is $ and text starts or ends with $.
-    // Its acctually a bug that must fix!
-    text = ' ' + text + ' ';
     variable = variable.replace('$', '\\$');
 
     var validChars = '(?:[^A-Za-z0-9_\\$"\']|^|$)',
@@ -53,63 +52,89 @@ module.exports = function(grunt) {
   },
 
   processFile = function (filepath) {
-    var unusedDependencies = [],
-      content = grunt.file.read(filepath);
+    var results = [],
+        content = grunt.file.read(filepath);
 
-    // Read file source.
-    var matches = /define\s*\(\s*\[\s*([^]*?)\s*\]\s*,\s*function\s*\(\s*([^]*?)\s*\)\s*(\{[^]*\})/m.exec(content);
+    var re = /define\s*\(\s*(?:['"](.*)['"]\s*,\s*)?(?:\[\s*([^]*?)\s*\]\s*,)?\s*function\s*\(\s*([^]*?)\s*\)\s*\{/gm,
+        matches;
 
-    if (matches) {
-      var paths = matches[1],
-          dependencies = matches[2],
-          text = matches[3], // Unprocessed
+    while ((matches = re.exec(content)) !== null) {
+      var unusedDependencies = [],
+          moduleId = matches[1],
+          paths = matches[2],
+          dependencies = matches[3],
+          text = content.substring(re.lastIndex - 1), // Unprocessed
           body, // Module body with comments
           source, // Module body without comments
           comments; // Array of inline and block comments
 
-      if (paths) {
-        //grunt.log.writeln('paths:', paths);
-        paths = paths.split(/\s*,\s*/);
-      }
-
-      if (dependencies) {
-        //grunt.log.writeln('dependencies:', dependencies);
-        dependencies = dependencies.split(/\s*,\s*/);
-      }
+      paths = paths ? paths.split(/\s*,\s*/) : [];
+      dependencies = dependencies ? dependencies.split(/\s*,\s*/) : [];
 
       if (paths && dependencies && text) {
         body = getModuleBody(text);
 
         if (body) {
-          var result = removeComments(body);
+          var rcResult = removeComments(body);
 
-          if (result) {
-            source = result.source;
-            comments = result.comments;
+          if (rcResult) {
+            source = rcResult.source;
+            comments = rcResult.comments;
 
-            for (var key in dependencies) {
-              var dependency = dependencies[key];
-
-              if (!findUseage(dependency, source)) {
-                unusedDependencies.push(dependency);
-              }
-            }
+            unusedDependencies = dependencies.filter(function (dependency) {
+              return options.excepts.indexOf(dependency) < 0 && !findUseage(dependency, source);
+            });
           }
+
+          re.lastIndex += body.length;
         }
       }
+
+      results.push({
+        moduleId: moduleId,
+        paths: paths,
+        dependencies: dependencies,
+        bodyWithComments: body,
+        bodyWithoutComments: source,
+        comments: comments,
+        unusedDependencies: unusedDependencies
+      });
     }
 
-    return unusedDependencies;
+    return results;
+  },
+
+  logResult = function (result) {
+    if (options.logModuleId && result.moduleId) {
+      grunt.log.writeln('\nmodule id:', result.moduleId);
+    }
+
+    if (options.logDependencyPaths && result.paths.length) {
+      grunt.log.writeln('\npaths:', result.paths.join(', '));
+    }
+
+    if (options.logDependencyNames && result.dependencies.length) {
+      grunt.log.writeln('\ndependencies:', result.dependencies.join(', '));
+    }
+
+    if (options.logUnusedDependencyNames && result.unusedDependencies.length) {
+      grunt.log.writeln('\nUnused dependencies: ' + result.unusedDependencies.join(', '));
+    }
   };
 
-  grunt.registerMultiTask('amd_dependency_checker', 'A grunt plugin that finds unused dependencies in AMD modules.', function() {
+  grunt.registerMultiTask('amd_dependency_checker', 'Finds unused dependencies in AMD modules.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
+    options = this.options({
+      excepts: [],
+      logModuleId: false,
+      logDependencyPaths: false,
+      logDependencyNames: false,
+      logUnusedDependencyNames: true
     });
 
     var filesCounter = 0,
-      unusedCounter = 0,
-      filesWithUnusedDependenciesCounter = 0;
+        unusedCounter = 0,
+        filesWithUnusedDependenciesCounter = 0;
 
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
@@ -125,22 +150,29 @@ module.exports = function(grunt) {
         }
       }).forEach(function(filepath) {
         grunt.log.write('Processing "' + filepath + '"...');
-        var result = processFile(filepath);
 
-        if (result && result.length) {
+        var results = processFile(filepath);
+
+        grunt.log.write(' [' + (results.length ? results.length : 'no') + ' module' + (results.length > 1 ? 's' : '') + ']');
+
+        var fileHasUnusedDependencies = false;
+
+        results.forEach(function (result) {
+          var unusedDependencies = result.unusedDependencies;
+
+          if (unusedDependencies.length) {
+            fileHasUnusedDependencies = true;
+            unusedCounter += unusedDependencies.length;
+          }
+
+          logResult(result);
+        });
+
+        if (fileHasUnusedDependencies) {
           ++filesWithUnusedDependenciesCounter;
-          var str = '';
-          result.forEach(function (dependency) {
-            ++unusedCounter;
-            str += (str.length ? ', ' : '') + dependency;
-          });
-
-          grunt.log.writeln();
-          grunt.log.writeln('Unused dependencies: ' + str);
-          grunt.log.writeln();
-        } else {
-          grunt.log.writeln(' Ok');
         }
+
+        grunt.log.writeln();
       });
     });
 

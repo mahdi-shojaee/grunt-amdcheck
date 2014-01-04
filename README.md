@@ -1,6 +1,6 @@
 # grunt-amd-dependency-checker
 
-> A grunt plugin that finds unused dependencies in AMD modules.
+> Finds unused dependencies in AMD modules.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -20,38 +20,58 @@ grunt.loadNpmTasks('grunt-amd-dependency-checker');
 ## The "amd_dependency_checker" task
 
 ### Overview
-In your project's Gruntfile, add a section named `amd_dependency_checker` to the data object passed into `grunt.initConfig()`.
-
-```js
-grunt.initConfig({
-  amd_dependency_checker: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
-});
-```
+When an AMD based project grows, number of it's js files grows too and some dependencies of the modules that had been used before, can become useless later. The AMD module loader (e.g. requirejs) loads those useless dependencies from network which can increase initial page load time.
+This grunt plugin can detect and report those useless dependencies without modifying source files.
 
 ### Options
 
-Currently no options are supported.
+#### excepts
+Type: Array
+Default value: []
+
+An array of strings that represent dependencies that should not take into account.
+
+#### logModuleId
+Type: boolean
+Default value: false
+
+Logs the id of the module if the module id is specified.
+
+#### logDependencyPaths
+Type: boolean
+Default value: false
+
+Logs the list of dependencies paths of the module.
+
+#### logDependencyNames
+Type: boolean
+Default value: false
+
+Logs the list of dependencies names of the module.
+
+#### logUnusedDependencyNames
+Type: boolean
+Default value: true
+
+Logs the list of unused dependencies names of the module.
 
 ### Usage Examples
 
 ```js
 grunt.initConfig({
   amd_dependency_checker: {
-    options: {},
-    files: [
-      {
-        expand: true,     // Enable dynamic expansion.
-        cwd: 'test/js/',  // Src matches are relative to this path.
-        src: ['**/*.js'], // Actual pattern(s) to match.
+    dev: {
+      options: {
+        excepts: ['module']
       },
-    ],
+      files: [
+        {
+          expand: true,     // Enable dynamic expansion.
+          cwd: 'js/',       // Src matches are relative to this path.
+          src: ['**/*.js'], // Actual pattern(s) to match.
+        },
+      ]
+    }
   },
 });
 ```
@@ -60,4 +80,6 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+ * 2014-01-02   v0.1.1   Works on files with multiple modules. Can detect module id if provided.
+ * 2014-01-01   v0.1.0   Works on files with a single module.
+

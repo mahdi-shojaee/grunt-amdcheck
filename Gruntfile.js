@@ -16,6 +16,7 @@ module.exports = function(grunt) {
     amd_dependency_checker: {
       main: {
         options: {
+          // excepts: ['module'],
         },
         files: [
           {
@@ -25,7 +26,7 @@ module.exports = function(grunt) {
           },
         ],
       }
-    }
+    },
   });
 
   // Actually load this plugin's task(s).

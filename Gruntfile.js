@@ -23,7 +23,12 @@ module.exports = function(grunt) {
             expand: true,     // Enable dynamic expansion.
             cwd: 'js/',  // Src matches are relative to this path.
             src: ['**/*.js'], // Actual pattern(s) to match.
+            dest: 'tmp/'
           },
+          // {
+          //   src: ['js/ttt.js'],
+          //   dest: 'tmp/ttt.js'
+          // }
         ],
       }
     },

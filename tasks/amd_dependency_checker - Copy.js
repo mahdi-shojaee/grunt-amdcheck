@@ -54,14 +54,18 @@ module.exports = function(grunt) {
     var results = [],
         content = grunt.file.read(filepath);
 
-    var output = content.replace(
-      /define\s*\(\s*(?:['"](.*)['"]\s*,\s*)?(?:\[\s*([^]*?)\s*\]\s*,)?\s*function\s*\(\s*([^]*?)\s*\)\s*\{/gm,
-      function (match, moduleId, pathsStr, dependenciesStr, offset) {
-      var text = content.substr(offset + match.length - 1), // Unprocessed
+    var re = /define\s*\(\s*(?:['"](.*)['"]\s*,\s*)?(?:\[\s*([^]*?)\s*\]\s*,)?\s*function\s*\(\s*([^]*?)\s*\)\s*\{/gm,
+        matches;
+
+    while ((matches = re.exec(content)) !== null) {
+      var moduleId = matches[1],
+          pathsStr = matches[2],
+          dependenciesStr = matches[3],
           paths,
           dependencies,
           unusedDependencies = [],
-          unusedPaths = [],
+          usedDependencies = [],
+          text = content.substr(re.lastIndex - 1), // Unprocessed
           body, // Module body with comments
           source, // Module body without comments
           comments; // Array of inline and block comments
@@ -83,81 +87,56 @@ module.exports = function(grunt) {
               return options.excepts.indexOf(dependency) < 0 && !findUseage(dependency, source);
             });
 
-            unusedPaths = unusedDependencies.map(function (dependency) {
-              return paths[dependencies.indexOf(dependency)];
+            usedDependencies = dependencies.filter(function (dependency) {
+              return unusedDependencies.indexOf(dependency) < 0;
             });
 
             results.push({
               moduleId: moduleId,
               paths: paths,
               dependencies: dependencies,
-              unusedPaths: unusedPaths,
               unusedDependencies: unusedDependencies,
               bodyWithComments: body,
               bodyWithoutComments: source,
               comments: comments
             });
           }
+
+          re.lastIndex += body.length;
         }
       }
+    }
 
-      if (options.removeUnusedDependencies) {
-        var usedDependencies = dependencies.filter(function (dependency) {
-          return unusedDependencies.indexOf(dependency) < 0;
-        });
-
-        var usedPaths = paths.filter(function (dependency) {
-          return unusedPaths.indexOf(dependency) < 0;
-        });
-
-        match = match.replace(pathsStr, usedPaths.join(', ')).replace(dependenciesStr, usedDependencies.join(', '));
-      }
-
-      return match;
-    });
-
-    return {
-      output: output,
-      results: results
-    };
+    return results;
   },
 
   logResult = function (result) {
     if (options.logModuleId && result.moduleId) {
-      grunt.log.writeln('module id:', result.moduleId);
+      grunt.log.writeln('\nmodule id:', result.moduleId);
     }
 
     if (options.logDependencyPaths && result.paths.length) {
-      grunt.log.writeln('paths:', result.paths.join(', '));
+      grunt.log.writeln('\npaths:', result.paths.join(', '));
     }
 
     if (options.logDependencyNames && result.dependencies.length) {
-      grunt.log.writeln('dependencies:', result.dependencies.join(', '));
-    }
-
-    if (options.logUnusedDependencyPaths && result.unusedPaths.length) {
-      grunt.log.writeln('Unused paths: ' + result.unusedPaths.join(', '));
+      grunt.log.writeln('\ndependencies:', result.dependencies.join(', '));
     }
 
     if (options.logUnusedDependencyNames && result.unusedDependencies.length) {
-      grunt.log.writeln('Unused dependencies: ' + result.unusedDependencies.join(', '));
+      grunt.log.writeln('\nUnused dependencies: ' + result.unusedDependencies.join(', '));
     }
   };
 
-  grunt.registerMultiTask('amd_dependency_checker', 'Finds and removes unused dependencies in AMD modules.', function() {
+  grunt.registerMultiTask('amd_dependency_checker', 'Finds unused dependencies in AMD modules.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     options = this.options({
       excepts: [],
-      logFilePath: true,
       logModuleId: false,
       logDependencyPaths: false,
       logDependencyNames: false,
-      logUnusedDependencyPaths: true,
-      logUnusedDependencyNames: false,
-      removeUnusedDependencies: true
+      logUnusedDependencyNames: true
     });
-
-    options.logFilePath = options.logFilePath || options.logDependencyPaths || options.logDependencyNames || options.logUnusedDependencyPaths || options.logUnusedDependencyNames;
 
     var filesCounter = 0,
         unusedCounter = 0,
@@ -166,7 +145,6 @@ module.exports = function(grunt) {
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
-      var dest = f.dest;
       var src = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
         if (!grunt.file.exists(filepath)) {
@@ -177,16 +155,11 @@ module.exports = function(grunt) {
           return true;
         }
       }).forEach(function(filepath) {
-        if (options.logFilePath) {
-          grunt.log.write(filepath);
-        }
+        grunt.log.write('Processing "' + filepath + '"...');
 
-        var processResult = processFile(filepath),
-            results = processResult.results;
+        var results = processFile(filepath);
 
-        if (options.logFilePath) {
-          grunt.log.writeln(' (' + (results.length ? results.length : 'no') + ' module' + (results.length > 1 ? 's' : '') + ')');
-        }
+        grunt.log.write(' [' + (results.length ? results.length : 'no') + ' module' + (results.length > 1 ? 's' : '') + ']');
 
         var fileHasUnusedDependencies = false;
 
@@ -203,12 +176,9 @@ module.exports = function(grunt) {
 
         if (fileHasUnusedDependencies) {
           ++filesWithUnusedDependenciesCounter;
-          grunt.log.writeln();
         }
 
-        if (options.removeUnusedDependencies) {
-          grunt.file.write(dest, processResult.output);
-        }
+        grunt.log.writeln();
       });
     });
 

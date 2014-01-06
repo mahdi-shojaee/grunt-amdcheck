@@ -69,7 +69,7 @@ Logs the list of unused dependencies names of the module.
 
 #### removeUnusedDependencies
 Type: boolean
-Default value: false
+Default value: true
 
 Removes detected unused dependencies and save the new files.
 

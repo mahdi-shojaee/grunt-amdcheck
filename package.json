@@ -37,6 +37,8 @@
     "AMD",
     "dependency",
     "unused",
+    "useless",
+    "excess",
     "requirejs"
   ],
   "readmeFilename": "README.md"

@@ -17,6 +17,9 @@ module.exports = function(grunt) {
       main: {
         options: {
           // excepts: ['module'],
+          // logUnusedDependencyPaths: false,
+          // logUnusedDependencyNames: true,
+          removeUnusedDependencies: false
         },
         files: [
           {

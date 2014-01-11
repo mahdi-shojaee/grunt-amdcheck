@@ -10,11 +10,13 @@
 
 module.exports = function(grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
-  var options = {};
+  var options = {},
 
-  var getModuleBody = function (text) {
+  defineRegExp = /define\s*\(\s*(?:['"](.*)['"]\s*,\s*)?(?:\[\s*([^]*?)\s*\]\s*,)?\s*function\s*\(\s*([^]*?)\s*\)\s*\{/gm,
+  commentRegExp = /(?:\/\*[^]*?\*\/)|(?:\/\/[^]*?$)/gm,
+  commaRegExp = /\s*,\s*/,
+
+  getModuleBody = function (text) {
     for (var i = 0, counter = 0, len = text.length; i < len; ++i) {
       if (text[i] === '{') {
         ++counter;
@@ -32,10 +34,13 @@ module.exports = function(grunt) {
 
   removeComments = function (text) {
     var comments = [];
-    text = text.replace(/(?:\/\*[^]*?\*\/)|(?:\/\/[^]*?$)/gm, function (match) {
-      comments.push(match);
-      return '';
-    });
+
+    if (text) {
+      text = text.replace(commentRegExp, function (match) {
+        comments.push(match);
+        return '';
+      });
+    }
 
     return { source: text, comments: comments };
   },
@@ -43,8 +48,8 @@ module.exports = function(grunt) {
   findUseage = function (variable, text) {
     variable = variable.replace('$', '\\$');
 
-    var validChars = '(?:[^A-Za-z0-9_\\$"\']|^|$)',
-      pattern = validChars + variable + validChars,
+    var invalidChars = '(?:[^A-Za-z0-9_\\$"\']|^|$)',
+      pattern = invalidChars + variable + invalidChars,
       regExp = new RegExp(pattern);
 
     return !!regExp.exec(text);
@@ -54,9 +59,7 @@ module.exports = function(grunt) {
     var results = [],
         content = grunt.file.read(filepath);
 
-    var output = content.replace(
-      /define\s*\(\s*(?:['"](.*)['"]\s*,\s*)?(?:\[\s*([^]*?)\s*\]\s*,)?\s*function\s*\(\s*([^]*?)\s*\)\s*\{/gm,
-      function (match, moduleId, pathsStr, dependenciesStr, offset) {
+    var output = content.replace(defineRegExp, function (match, moduleId, pathsStr, dependenciesStr, offset) {
       var text = content.substr(offset + match.length - 1), // Unprocessed
           paths,
           dependencies,
@@ -66,8 +69,11 @@ module.exports = function(grunt) {
           source, // Module body without comments
           comments; // Array of inline and block comments
 
-      paths = pathsStr ? pathsStr.split(/\s*,\s*/) : [];
-      dependencies = dependenciesStr ? dependenciesStr.split(/\s*,\s*/) : [];
+      pathsStr = removeComments(pathsStr).source;
+      dependenciesStr = removeComments(dependenciesStr).source;
+
+      paths = pathsStr ? pathsStr.split(commaRegExp) : [];
+      dependencies = dependenciesStr ? dependenciesStr.split(commaRegExp) : [];
 
       if (paths && dependencies && text) {
         body = getModuleBody(text);

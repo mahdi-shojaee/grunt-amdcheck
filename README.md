@@ -96,6 +96,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2014-01-11   v0.1.6   Bug fix on commented dependencies.
  * 2014-01-05   v0.1.5   Can remove unused dependencies. Add some logging options.
  * 2014-01-02   v0.1.1   Works on files with multiple modules. Can detect module id if provided.
  * 2014-01-01   v0.1.0   Works on files with a single module.

@@ -16,10 +16,11 @@ module.exports = function(grunt) {
     amd_dependency_checker: {
       main: {
         options: {
-          // excepts: ['module'],
+          // excepts: ['b'],
+          exceptsPaths: [/^jquery\./],
           // logUnusedDependencyPaths: false,
           // logUnusedDependencyNames: true,
-          removeUnusedDependencies: false
+          // removeUnusedDependencies: false
         },
         files: [
           {

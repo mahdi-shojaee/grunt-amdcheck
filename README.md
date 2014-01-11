@@ -29,7 +29,13 @@ This grunt plugin can detect and remove those useless dependencies without modif
 Type: Array
 Default value: []
 
-An array of strings that represent dependencies that should not take into account.
+An array of strings or RegExps that represent dependency names that should not take into account.
+
+#### exceptsPaths
+Type: Array
+Default value: []
+
+An array of strings or RegExps that represent dependency paths that should not take into account.
 
 #### logFilePath
 Type: boolean
@@ -80,7 +86,8 @@ grunt.initConfig({
   amd_dependency_checker: {
     dev: {
       options: {
-        excepts: ['module']
+        excepts: ['module'],
+        exceptsPaths: ['require', /^jquery\./]
       },
       files: [
         {
@@ -96,6 +103,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2014-01-11   v0.1.7   Bug fix on commented dependencies. Add the new `exceptsPaths` option. Options `excepts` and `exceptsPaths` can take RegExps.
  * 2014-01-11   v0.1.6   Bug fix on commented dependencies.
  * 2014-01-05   v0.1.5   Can remove unused dependencies. Add some logging options.
  * 2014-01-02   v0.1.1   Works on files with multiple modules. Can detect module id if provided.

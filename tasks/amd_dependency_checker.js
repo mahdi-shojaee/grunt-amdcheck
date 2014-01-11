@@ -55,25 +55,44 @@ module.exports = function(grunt) {
     return !!regExp.exec(text);
   },
 
+  toString = Object.prototype.toString,
+
+  isString = function (obj) {
+    return toString.call(obj) === "[object String]";
+  },
+
+  isRegExp = function (obj) {
+    return toString.call(obj) === "[object RegExp]";
+  },
+
+  isException = function (exceptions, dependency) {
+    return exceptions.some(function (exception) {
+      if (isString(exception)) {
+        return exception === dependency;
+      } else if (isRegExp(exception)) {
+        return exception.test(dependency);
+      }
+    });
+  },
+
   processFile = function (filepath) {
     var results = [],
         content = grunt.file.read(filepath);
 
     var output = content.replace(defineRegExp, function (match, moduleId, pathsStr, dependenciesStr, offset) {
       var text = content.substr(offset + match.length - 1), // Unprocessed
-          paths,
-          dependencies,
+          paths, dependencies, commentlessPathsStr, commentlessDependenciesStr,
           unusedDependencies = [],
           unusedPaths = [],
           body, // Module body with comments
           source, // Module body without comments
           comments; // Array of inline and block comments
 
-      pathsStr = removeComments(pathsStr).source;
-      dependenciesStr = removeComments(dependenciesStr).source;
+      commentlessPathsStr = removeComments(pathsStr).source;
+      commentlessDependenciesStr = removeComments(dependenciesStr).source;
 
-      paths = pathsStr ? pathsStr.split(commaRegExp) : [];
-      dependencies = dependenciesStr ? dependenciesStr.split(commaRegExp) : [];
+      paths = commentlessPathsStr ? commentlessPathsStr.split(commaRegExp).map(function (p) { return p.substr(1, p.length - 2); }) : [];
+      dependencies = commentlessDependenciesStr ? commentlessDependenciesStr.split(commaRegExp) : [];
 
       if (paths && dependencies && text) {
         body = getModuleBody(text);
@@ -86,7 +105,9 @@ module.exports = function(grunt) {
             comments = rcResult.comments;
 
             unusedDependencies = dependencies.filter(function (dependency) {
-              return options.excepts.indexOf(dependency) < 0 && !findUseage(dependency, source);
+              return !isException(options.excepts, dependency) &&
+                     !isException(options.exceptsPaths, paths[dependencies.indexOf(dependency)]) &&
+                     !findUseage(dependency, source);
             });
 
             unusedPaths = unusedDependencies.map(function (dependency) {
@@ -112,11 +133,12 @@ module.exports = function(grunt) {
           return unusedDependencies.indexOf(dependency) < 0;
         });
 
-        var usedPaths = paths.filter(function (dependency) {
-          return unusedPaths.indexOf(dependency) < 0;
+        var usedPaths = paths.filter(function (path) {
+          return unusedPaths.indexOf(path) < 0;
         });
 
-        match = match.replace(pathsStr, usedPaths.join(', ')).replace(dependenciesStr, usedDependencies.join(', '));
+        match = match.replace(pathsStr, usedPaths.map(function (p) { return '"' + p + '"'; }).join(', '))
+                .replace(dependenciesStr, usedDependencies.join(', '));
       }
 
       return match;
@@ -154,6 +176,7 @@ module.exports = function(grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     options = this.options({
       excepts: [],
+      exceptsPaths: [],
       logFilePath: true,
       logModuleId: false,
       logDependencyPaths: false,

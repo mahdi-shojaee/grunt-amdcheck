@@ -26,55 +26,55 @@ This grunt plugin can detect and remove those useless dependencies without modif
 ### Options
 
 #### excepts
-Type: Array
+Type: Array  
 Default value: []
 
 An array of strings or RegExps that represent dependency names that should not take into account.
 
 #### exceptsPaths
-Type: Array
+Type: Array  
 Default value: []
 
 An array of strings or RegExps that represent dependency paths that should not take into account.
 
 #### logFilePath
-Type: boolean
+Type: boolean  
 Default value: true
 
 Log the file path of the current processing file if this option or one of the options `logDependencyPaths`, `logDependencyNames`, `logUnusedDependencyPaths` or `logUnusedDependencyNames` was true.
 
 #### logModuleId
-Type: boolean
+Type: boolean  
 Default value: false
 
 Logs the id of the module if the module id is specified.
 
 #### logDependencyPaths
-Type: boolean
+Type: boolean  
 Default value: false
 
 Logs the list of dependencies paths of the module.
 
 #### logDependencyNames
-Type: boolean
+Type: boolean  
 Default value: false
 
 Logs the list of dependencies names of the module.
 
 #### logUnusedDependencyPaths
-Type: boolean
+Type: boolean  
 Default value: true
 
 Logs the list of unused dependencies paths of the module.
 
 #### logUnusedDependencyNames
-Type: boolean
+Type: boolean  
 Default value: false
 
 Logs the list of unused dependencies names of the module.
 
 #### removeUnusedDependencies
-Type: boolean
+Type: boolean  
 Default value: true
 
 Removes detected unused dependencies and save the new files.

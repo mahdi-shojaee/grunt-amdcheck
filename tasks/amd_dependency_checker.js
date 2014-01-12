@@ -52,7 +52,7 @@ module.exports = function(grunt) {
       pattern = invalidChars + variable + invalidChars,
       regExp = new RegExp(pattern);
 
-    return !!regExp.exec(text);
+    return regExp.test(text);
   },
 
   toString = Object.prototype.toString,

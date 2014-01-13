@@ -103,7 +103,7 @@ grunt.initConfig({
 ```
 
 ## Release History
- * 2014-01-13   v0.2.0   Extracted the core as a separate package ([amdextract](https://npmjs.org/package/amdextract)).
+ * 2014-01-13   v0.2.0   Extracted the core as a separate package ([amdextract](https://github.com/mehdishojaei/amdextract)).
  * 2014-01-12   v0.1.7   Bug fix on commented dependencies. Add the new `exceptsPaths` option. Options `excepts` and `exceptsPaths` can take RegExps.
  * 2014-01-11   v0.1.6   Bug fix on commented dependencies.
  * 2014-01-05   v0.1.5   Can remove unused dependencies. Add some logging options.

@@ -1,7 +1,7 @@
 {
   "name": "grunt-amd-dependency-checker",
   "description": "Finds and removes unused dependencies in AMD modules.",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "homepage": "https://github.com/mehdishojaei/grunt-amd-dependency-checker",
   "author": {
     "name": "Mehdi Shojaei",
@@ -26,6 +26,9 @@
     "node": ">= 0.8.0"
   },
   "scripts": {},
+  "dependencies": {
+    "amdextract": "~0.1.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.0"
   },

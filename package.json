@@ -1,8 +1,8 @@
 {
-  "name": "grunt-amd-dependency-checker",
+  "name": "grunt-amdcheck",
   "description": "Finds and removes unused dependencies in AMD modules.",
   "version": "0.2.0",
-  "homepage": "https://github.com/mehdishojaei/grunt-amd-dependency-checker",
+  "homepage": "https://github.com/mehdishojaei/grunt-amdcheck",
   "author": {
     "name": "Mehdi Shojaei",
     "email": "msh6180339@gmail.com",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mehdishojaei/grunt-amd-dependency-checker.git"
+    "url": "https://github.com/mehdishojaei/grunt-amdcheck.git"
   },
   "bugs": {
-    "url": "https://github.com/mehdishojaei/grunt-amd-dependency-checker/issues"
+    "url": "https://github.com/mehdishojaei/grunt-amdcheck/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/mehdishojaei/grunt-amd-dependency-checker/blob/master/LICENSE-MIT"
+      "url": "https://github.com/mehdishojaei/grunt-amdcheck/blob/master/LICENSE-MIT"
     }
   ],
   "main": "Gruntfile.js",

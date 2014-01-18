@@ -1,4 +1,4 @@
-# grunt-amd-dependency-checker
+# grunt-amdcheck
 
 > Finds and removes unused dependencies in AMD modules.
 
@@ -8,16 +8,16 @@ This plugin requires Grunt `~0.4.0`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-amd-dependency-checker --save-dev
+npm install grunt-amdcheck --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-amd-dependency-checker');
+grunt.loadNpmTasks('grunt-amdcheck');
 ```
 
-## The "amd_dependency_checker" task
+## The "amdcheck" task
 
 ### Overview
 When an AMD based project grows, number of it's js files grows too and some dependencies of the modules that had been used before, can become useless later. The AMD module loader (e.g. `requirejs`) loads those useless dependencies from network which can increase initial page load time.
@@ -83,7 +83,7 @@ Removes detected unused dependencies and save the new files.
 
 ```js
 grunt.initConfig({
-  amd_dependency_checker: {
+  amdcheck: {
     dev: {
       options: {
         excepts: ['module'],

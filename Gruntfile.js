@@ -1,6 +1,6 @@
 /*
- * grunt-amd-dependency-checker
- * https://github.com/mehdishojaei/grunt-amd-dependency-checker
+ * grunt-amdcheck
+ * https://github.com/mehdishojaei/grunt-amdcheck
  *
  * Copyright (c) 2013 Mehdi Shojaei
  * Licensed under the MIT license.
@@ -13,7 +13,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     // Configuration to be run (and then tested).
-    amd_dependency_checker: {
+    amdcheck: {
       main: {
         options: {
           // excepts: ['b'],
@@ -24,24 +24,20 @@ module.exports = function(grunt) {
         },
         files: [
           {
-            expand: true,     // Enable dynamic expansion.
-            cwd: 'js/',  // Src matches are relative to this path.
-            src: ['**/*.js'], // Actual pattern(s) to match.
+            expand: true,
+            cwd: 'js/',
+            src: ['**/*.js'],
             dest: 'tmp/'
-          },
-          // {
-          //   src: ['js/ttt.js'],
-          //   dest: 'tmp/ttt.js'
-          // }
-        ],
+          }
+        ]
       }
-    },
+    }
   });
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['amd_dependency_checker']);
+  grunt.registerTask('default', ['amdcheck']);
 
 };

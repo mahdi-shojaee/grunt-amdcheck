@@ -1,6 +1,6 @@
 /*
- * grunt-amd-dependency-checker
- * https://github.com/mehdishojaei/grunt-amd-dependency-checker
+ * grunt-amdcheck
+ * https://github.com/mehdishojaei/grunt-amdcheck
  *
  * Copyright (c) 2013 Mehdi Shojaei
  * Licensed under the MIT license.
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     }
   };
 
-  grunt.registerMultiTask('amd_dependency_checker', 'Finds and removes unused dependencies in AMD modules.', function() {
+  grunt.registerMultiTask('amdcheck', 'Finds and removes unused dependencies in AMD modules.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     options = this.options({
       excepts: [],

@@ -37,6 +37,15 @@ Default value: []
 
 An array of strings or RegExps that represent dependency paths that should not take into account.
 
+NOTE: `exceptsPaths` can also be declared before each module definition as a comment of strings of module paths separated by commas. This only applies on the underlying module definition.
+
+``` js
+/* exceptsPaths: view/c */
+define(["view/a", "view/b", "view/c"], function (a, b, c) {
+  b.fetch();
+});
+```
+
 #### logFilePath
 Type: boolean  
 Default value: true
@@ -103,6 +112,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2014-01-22   v0.2.1   `exceptsPaths` can also be defined before each module definition.
  * 2014-01-13   v0.2.0   Extracted the core as a separate package ([amdextract](https://github.com/mehdishojaei/amdextract)).
  * 2014-01-12   v0.1.7   Bug fix on commented dependencies. Add the new `exceptsPaths` option. Options `excepts` and `exceptsPaths` can take RegExps.
  * 2014-01-11   v0.1.6   Bug fix on commented dependencies.

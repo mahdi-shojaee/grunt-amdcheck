@@ -3,11 +3,13 @@
   "description": "Finds and removes unused dependencies in AMD modules.",
   "version": "0.2.1",
   "homepage": "https://github.com/mehdishojaei/grunt-amdcheck",
-  "author": {
-    "name": "Mehdi Shojaei",
-    "email": "msh6180339@gmail.com",
-    "url": "https://github.com/mehdishojaei"
-  },
+  "author": "Mehdi Shojaei",
+  "contributors": [
+    {
+      "name": "Mehdi Shojaei",
+      "email": "msh6180339@gmail.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mehdishojaei/grunt-amdcheck.git"

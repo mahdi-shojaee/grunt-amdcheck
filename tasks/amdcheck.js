@@ -105,7 +105,7 @@ module.exports = function(grunt) {
         }
 
         if (options.removeUnusedDependencies) {
-          grunt.file.write(dest, processResult.optimizedOutput);
+          grunt.file.write(dest, processResult.optimizedContent);
         }
       });
     });

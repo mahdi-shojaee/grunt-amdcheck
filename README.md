@@ -145,6 +145,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2014-03-19   v0.2.2   Update the dependency version.
  * 2014-01-22   v0.2.1   `exceptsPaths` can also be defined before each module definition.
  * 2014-01-13   v0.2.0   Extracted the core as a separate package ([amdextract](https://github.com/mehdishojaei/amdextract)).
  * 2014-01-12   v0.1.7   Bug fix on commented dependencies. Add the new `exceptsPaths` option. Options `excepts` and `exceptsPaths` can take RegExps.

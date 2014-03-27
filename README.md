@@ -23,6 +23,30 @@ grunt.loadNpmTasks('grunt-amdcheck');
 When an AMD based project grows, number of it's js files grows too and some dependencies of the modules that had been used before, can become useless later. The AMD module loader (e.g. `requirejs`) loads those useless dependencies from network which can increase initial page load time.
 This grunt plugin can detect and remove those useless dependencies without modifying source files.
 
+## example
+
+source.js
+```js
+define('module1', ['p1', 'p2'], function (a, b) {
+  return a;
+});
+
+define('module2', ['p1', 'p2', 'p3'], function (a, b, c) {
+  return b;
+});
+```
+
+optimized-source.js
+```js
+define('module1', ['p1'], function (a) {
+  return a;
+});
+
+define('module2', ['p2'], function (b) {
+  return b;
+});
+```
+
 ### Options
 
 #### excepts
@@ -39,10 +63,19 @@ An array of strings or RegExps that represent dependency paths that should not t
 
 NOTE: `exceptsPaths` can also be declared before each module definition as a comment of strings of module paths separated by commas. This only applies on the underlying module definition.
 
-``` js
-/* exceptsPaths: view/c */
-define(["view/a", "view/b", "view/c"], function (a, b, c) {
-  b.fetch();
+source.js
+```js
+/* exceptsPaths: p3 */
+define(['p1', 'p2', 'p3'], function (a, b, c) {
+  return b;
+});
+```
+
+optimized-source.js
+```js
+/* exceptsPaths: p3 */
+define(['p2', 'p3'], function (b, c) {
+  return b;
 });
 ```
 

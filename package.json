@@ -1,7 +1,7 @@
 {
   "name": "grunt-amdcheck",
   "description": "Finds and removes unused dependencies in AMD modules.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "homepage": "https://github.com/mehdishojaei/grunt-amdcheck",
   "author": "Mehdi Shojaei",
   "contributors": [

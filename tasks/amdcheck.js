@@ -106,7 +106,7 @@ module.exports = function(grunt) {
         }
 
         if (options.removeUnusedDependencies) {
-          if (!options.onlyFilesWithUnusedDependencies || (results.length > 0 && fileHasUnusedDependencies)) {
+          if (!options.onlyFilesWithUnusedDependencies || fileHasUnusedDependencies) {
             grunt.file.write(dest, processResult.optimizedContent);
           }
         }

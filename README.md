@@ -121,6 +121,12 @@ Default value: true
 
 Removes detected unused dependencies and save the new files.
 
+#### saveFilesWithUnusedDependenciesOnly
+Type: boolean  
+Default value: false
+
+When removing unused dependencies (i.e. `removeUnusedDependencies: true`), only write out files that have unused dependencies.
+
 ### Usage Examples
 
 ```js

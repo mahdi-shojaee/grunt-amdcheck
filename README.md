@@ -151,7 +151,7 @@ grunt.initConfig({
 ```
 
 ## Release History
- * 2014-04-09   v0.2.4   Update the dependency version.
+ * 2014-04-21   v0.3.0   Added option to only write out files that have unused dependencies.
  * 2014-03-19   v0.2.2   Update the dependency version.
  * 2014-01-22   v0.2.1   `exceptsPaths` can also be defined before each module definition.
  * 2014-01-13   v0.2.0   Extracted the core as a separate package ([amdextract](https://github.com/mehdishojaei/amdextract)).

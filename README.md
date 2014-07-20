@@ -1,6 +1,6 @@
 # grunt-amdcheck
 
-> Finds and removes unused dependencies in AMD modules.
+> Finds and removes unused dependencies in AMD modules (Uses AST to find out unused dependencies).
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -151,6 +151,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2014-07-20   v1.0.0   Uses AST to find out unused dependencies.
  * 2014-04-21   v0.3.0   Added option to only write out files that have unused dependencies.
  * 2014-03-19   v0.2.2   Update the dependency version.
  * 2014-01-22   v0.2.1   `exceptsPaths` can also be defined before each module definition.

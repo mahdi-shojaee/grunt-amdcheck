@@ -1,7 +1,7 @@
 {
   "name": "grunt-amdcheck",
-  "description": "Finds and removes unused dependencies in AMD modules (Uses AST to find out unused dependencies).",
-  "version": "1.0.0",
+  "description": "Use AST to find and remove unused dependencies in AMD modules.",
+  "version": "1.1.0",
   "homepage": "https://github.com/mehdishojaei/grunt-amdcheck",
   "author": "Mehdi Shojaei",
   "contributors": [

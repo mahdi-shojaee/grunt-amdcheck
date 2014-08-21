@@ -151,6 +151,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2014-08-22   v1.2.5   Fix a bug when there are comments between paths and dependencies.
  * 2014-08-16   v1.2.0   Entirely uses AST.
  * 2014-07-20   v1.0.0   Uses AST to find out unused dependencies.
  * 2014-04-21   v0.3.0   Added option to only write out files that have unused dependencies.

@@ -48,7 +48,8 @@ module.exports = function(grunt) {
       logUnusedDependencyPaths: true,
       logUnusedDependencyNames: false,
       removeUnusedDependencies: true,
-      saveFilesWithUnusedDependenciesOnly: false
+      saveFilesWithUnusedDependenciesOnly: false,
+      failForUnusedDependency: false
     });
 
     options.logFilePath = options.logFilePath || options.logDependencyPaths || options.logDependencyNames || options.logUnusedDependencyPaths || options.logUnusedDependencyNames;
@@ -98,6 +99,10 @@ module.exports = function(grunt) {
           }
 
           logResult(result);
+
+          if (options.failForUnusedDependency && result.unusedPaths.length) {
+            grunt.fail.warn('Unused paths: ' + result.unusedPaths.join(', ') + ' in ' + filepath);
+          }
         });
 
         if (fileHasUnusedDependencies) {

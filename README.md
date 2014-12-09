@@ -127,6 +127,12 @@ Default value: false
 
 When removing unused dependencies (i.e. `removeUnusedDependencies: true`), only write out files that have unused dependencies.
 
+#### failForUnusedDependency
+Type: boolean  
+Default value: false
+
+Lets the task fail when an unused dependency is found. Unused dependencies are not removed if enabled.
+
 ### Usage Examples
 
 ```js

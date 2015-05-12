@@ -34,10 +34,7 @@ module.exports = function(grunt) {
     }
   });
 
-  // Actually load this plugin's task(s).
   grunt.loadNpmTasks('grunt-amdcheck');
-
-  // By default, lint and run all tests.
   grunt.registerTask('default', ['amdcheck']);
 
 };

@@ -79,12 +79,6 @@ define(['p2', 'p3'], function (b, c) {
 });
 ```
 
-#### logFilePath
-Type: boolean  
-Default value: true
-
-Log the file path of the current processing file if this option or one of the options `logDependencyPaths`, `logDependencyNames`, `logUnusedDependencyPaths` or `logUnusedDependencyNames` was true.
-
 #### logModuleId
 Type: boolean  
 Default value: false
@@ -151,6 +145,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2015-05-12   v1.3.0   Option 'logFilePath' removed (only filepaths with unused deps will be logged).
  * 2014-08-22   v1.2.5   Fix a bug when there are comments between paths and dependencies.
  * 2014-08-16   v1.2.0   Entirely uses AST.
  * 2014-07-20   v1.0.0   Uses AST to find out unused dependencies.

@@ -41,7 +41,6 @@ module.exports = function(grunt) {
     options = this.options({
       excepts: [],
       exceptsPaths: [],
-      logFilePath: true,
       logModuleId: false,
       logDependencyPaths: false,
       logDependencyNames: false,
@@ -50,8 +49,6 @@ module.exports = function(grunt) {
       removeUnusedDependencies: true,
       saveFilesWithUnusedDependenciesOnly: false
     });
-
-    options.logFilePath = options.logFilePath || options.logDependencyPaths || options.logDependencyNames || options.logUnusedDependencyPaths || options.logUnusedDependencyNames;
 
     var filesCounter = 0,
         unusedCounter = 0,
@@ -71,10 +68,6 @@ module.exports = function(grunt) {
           return true;
         }
       }).forEach(function(filepath) {
-        if (options.logFilePath) {
-          grunt.log.write(filepath);
-        }
-
         var fileContent = grunt.file.read(filepath),
             processResult = amdextract.parse(fileContent, {
               excepts: options.excepts,
@@ -82,10 +75,6 @@ module.exports = function(grunt) {
               removeUnusedDependencies: options.removeUnusedDependencies
             }),
             results = processResult.results;
-
-        if (options.logFilePath) {
-          grunt.log.writeln(' (' + (results.length ? results.length : 'no') + ' module' + (results.length > 1 ? 's' : '') + ')');
-        }
 
         var fileHasUnusedDependencies = false;
 
@@ -97,7 +86,10 @@ module.exports = function(grunt) {
             unusedCounter += unusedDependencies.length;
           }
 
-          logResult(result);
+          if (fileHasUnusedDependencies) {
+            grunt.log.writeln(filepath + ' (' + (results.length ? results.length : 'no') + ' module' + (results.length > 1 ? 's' : '') + ')');
+            logResult(result);
+          }
         });
 
         if (fileHasUnusedDependencies) {

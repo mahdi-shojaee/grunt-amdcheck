@@ -41,6 +41,7 @@ module.exports = function(grunt) {
     options = this.options({
       excepts: [],
       exceptsPaths: [],
+      strict: false,
       logModuleId: false,
       logDependencyPaths: false,
       logDependencyNames: false,
@@ -51,7 +52,9 @@ module.exports = function(grunt) {
     });
 
     var filesCounter = 0,
-        unusedCounter = 0,
+        unusedPathsCounter = 0,
+        unusedDependenciesCounter = 0,
+        filesWithUnusedPathsCounter = 0,
         filesWithUnusedDependenciesCounter = 0;
 
     // Iterate over all specified file groups.
@@ -76,29 +79,43 @@ module.exports = function(grunt) {
             }),
             results = processResult.results;
 
-        var fileHasUnusedDependencies = false;
+        var fileHasUnusedDependencies = false,
+            fileHasUnusedPaths = false;
 
         results.forEach(function (result) {
+          var unusedPaths = result.unusedPaths;
           var unusedDependencies = result.unusedDependencies;
+
+          if (unusedPaths.length) {
+            fileHasUnusedPaths = true;
+            unusedPathsCounter += unusedPaths.length;
+          }
 
           if (unusedDependencies.length) {
             fileHasUnusedDependencies = true;
-            unusedCounter += unusedDependencies.length;
+            unusedDependenciesCounter += unusedDependencies.length;
           }
 
-          if (fileHasUnusedDependencies) {
+          if (fileHasUnusedDependencies || fileHasUnusedPaths) {
             grunt.log.writeln(filepath + ' (' + (results.length ? results.length : 'no') + ' module' + (results.length > 1 ? 's' : '') + ')');
             logResult(result);
           }
         });
 
-        if (fileHasUnusedDependencies) {
-          ++filesWithUnusedDependenciesCounter;
+        if (fileHasUnusedPaths || fileHasUnusedDependencies) {
+          if (fileHasUnusedPaths) {
+            ++filesWithUnusedPathsCounter;
+          }
+
+          if (fileHasUnusedDependencies) {
+            ++filesWithUnusedDependenciesCounter;
+          }
+
           grunt.log.writeln();
         }
 
         if (options.removeUnusedDependencies) {
-          if (!options.saveFilesWithUnusedDependenciesOnly || fileHasUnusedDependencies) {
+          if (!options.saveFilesWithUnusedDependenciesOnly || fileHasUnusedPaths || fileHasUnusedDependencies) {
             grunt.file.write(dest, processResult.optimizedContent);
           }
         }
@@ -106,8 +123,13 @@ module.exports = function(grunt) {
     });
 
     grunt.log.writeln();
-    grunt.log.writeln('Total unused dependencies: ' + unusedCounter + ' in ' + filesWithUnusedDependenciesCounter + ' files.');
+    grunt.log.writeln('Total unused paths: ' + unusedPathsCounter + ' in ' + filesWithUnusedPathsCounter + ' files.');
+    grunt.log.writeln('Total unused dependencies: ' + unusedDependenciesCounter + ' in ' + filesWithUnusedDependenciesCounter + ' files.');
     grunt.log.writeln('Total processed files: ' + filesCounter);
+
+    if (options.strict && (filesWithUnusedPathsCounter || filesWithUnusedDependenciesCounter)) {
+      return false;
+    }
   });
 
 };

@@ -79,6 +79,12 @@ define(['p2', 'p3'], function (b, c) {
 });
 ```
 
+#### strict
+Type: boolean  
+Default value: false
+
+When strict is true, throws an error if at least one unused dependency path or dependency name was found.
+
 #### logModuleId
 Type: boolean  
 Default value: false
@@ -145,6 +151,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2015-05-13   v1.3.1   Option 'strict' added.
  * 2015-05-12   v1.3.0   Option 'logFilePath' removed (only filepaths with unused deps will be logged).
  * 2014-08-22   v1.2.5   Fix a bug when there are comments between paths and dependencies.
  * 2014-08-16   v1.2.0   Entirely uses AST.

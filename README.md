@@ -20,7 +20,7 @@ grunt.loadNpmTasks('grunt-amdcheck');
 ## The "amdcheck" task
 
 ### Overview
-When an AMD-based project grows, the number of its js files grows too, and some dependencies of the modules that had been used before, can become useless later. The AMD module loader (e.g. `requirejs`) loads those useless dependencies from the network, which can increase initial page load time.
+When an AMD-based project grows, so does the number of its JS files. Some dependencies of previously used modules may no longer be necessary. The AMD module loader (e.g. `requirejs`) loads those useless dependencies from the network, which can increase initial page load time.
 This grunt plugin can detect and remove those useless dependencies without modifying source files.
 
 ## example
@@ -61,7 +61,7 @@ Default value: []
 
 An array of strings or RegExps that represent dependency paths that should not be taken into account.
 
-NOTE: `exceptsPaths` can also be declared before each module definition as a comment of strings of module paths separated by commas. This only applies to the underlying module definition.
+NOTE: `exceptsPaths`, followed by a comma-separated list of module paths can be declared before each module definition. This exception is only applied to the underlying module definition.
 
 source.js
 ```js

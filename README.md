@@ -20,7 +20,7 @@ grunt.loadNpmTasks('grunt-amdcheck');
 ## The "amdcheck" task
 
 ### Overview
-When an AMD based project grows, number of it's js files grows too and some dependencies of the modules that had been used before, can become useless later. The AMD module loader (e.g. `requirejs`) loads those useless dependencies from network which can increase initial page load time.
+When an AMD-based project grows, so does the number of its JS files. Some dependencies of previously used modules may no longer be necessary. The AMD module loader (e.g. `requirejs`) loads those useless dependencies from the network, which can increase initial page load time.
 This grunt plugin can detect and remove those useless dependencies without modifying source files.
 
 ## example
@@ -53,15 +53,15 @@ define('module2', ['p2'], function (b) {
 Type: Array  
 Default value: []
 
-An array of strings or RegExps that represent dependency names that should not take into account.
+An array of strings or RegExps that represent dependency names that should not be taken into account.
 
 #### exceptsPaths
 Type: Array  
 Default value: []
 
-An array of strings or RegExps that represent dependency paths that should not take into account.
+An array of strings or RegExps that represent dependency paths that should not be taken into account.
 
-NOTE: `exceptsPaths` can also be declared before each module definition as a comment of strings of module paths separated by commas. This only applies on the underlying module definition.
+NOTE: `exceptsPaths`, followed by a comma-separated list of module paths can be declared before each module definition. This exception is only applied to the underlying module definition.
 
 source.js
 ```js
@@ -95,31 +95,31 @@ Logs the id of the module if the module id is specified.
 Type: boolean  
 Default value: false
 
-Logs the list of dependencies paths of the module.
+Logs the list of dependency paths of the module.
 
 #### logDependencyNames
 Type: boolean  
 Default value: false
 
-Logs the list of dependencies names of the module.
+Logs the list of dependency names of the module.
 
 #### logUnusedDependencyPaths
 Type: boolean  
 Default value: true
 
-Logs the list of unused dependencies paths of the module.
+Logs the list of unused dependency paths of the module.
 
 #### logUnusedDependencyNames
 Type: boolean  
 Default value: false
 
-Logs the list of unused dependencies names of the module.
+Logs the list of unused dependency names of the module.
 
 #### removeUnusedDependencies
 Type: boolean  
 Default value: true
 
-Removes detected unused dependencies and save the new files.
+Removes detected unused dependencies and saves the new files.
 
 #### saveFilesWithUnusedDependenciesOnly
 Type: boolean  

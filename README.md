@@ -151,6 +151,7 @@ grunt.initConfig({
 ```
 
 ## Release History
+ * 2016-04-13   v1.3.2   Update grunt peerDep.
  * 2015-05-13   v1.3.1   Option 'strict' added.
  * 2015-05-12   v1.3.0   Option 'logFilePath' removed (only filepaths with unused deps will be logged).
  * 2014-08-22   v1.2.5   Fix a bug when there are comments between paths and dependencies.

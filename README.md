@@ -1,4 +1,4 @@
-# grunt-amdcheck
+# grunt-amdcheck [![Known Vulnerabilities](https://snyk.io/test/github/mehdishojaei/grunt-amdcheck/badge.svg)](https://snyk.io/test/github/mehdishojaei/grunt-amdcheck)
 
 > Uses AST to find and remove unused dependencies in AMD modules.
 

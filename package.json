@@ -29,7 +29,7 @@
   },
   "scripts": {},
   "dependencies": {
-    "amdextract": "3.0.0"
+    "amdextract": "^3.0.0"
   },
   "devDependencies": {
     "grunt": "^1.0.4"
